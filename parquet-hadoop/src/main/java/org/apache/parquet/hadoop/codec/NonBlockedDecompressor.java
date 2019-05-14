@@ -106,15 +106,15 @@ abstract public class NonBlockedDecompressor implements Decompressor {
     SnappyUtil.validateBuffer(buffer, off, len);
 
     if (inputBuffer.capacity() - inputBuffer.position() < len) {
-      final ByteBuffer newBuffer = ByteBuffer.allocateDirect(inputBuffer.position() + len);
+      int maxSize = Math.max(inputBuffer.position() * 2 , inputBuffer.position() + len);
+      final ByteBuffer newBuffer = ByteBuffer.allocateDirect(maxSize);
       inputBuffer.rewind();
       newBuffer.put(inputBuffer);
       final ByteBuffer oldBuffer = inputBuffer;
       inputBuffer = newBuffer;
       CleanUtil.cleanDirectBuffer(oldBuffer);
-    } else {
-      inputBuffer.limit(inputBuffer.position() + len);
     }
+    inputBuffer.limit(inputBuffer.position() + len);
     inputBuffer.put(buffer, off, len);
   }
 
@@ -155,7 +155,7 @@ abstract public class NonBlockedDecompressor implements Decompressor {
 
   @Override
   public void setDictionary(byte[] b, int off, int len) {
-    // No-op		
+    // No-op
   }
 
   /**
