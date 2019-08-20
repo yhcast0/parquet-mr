@@ -65,7 +65,7 @@ class InternalParquetRecordWriter<T> {
   private ColumnChunkPageWriteStore pageStore;
   private BloomFilterWriteStore bloomFilterWriteStore;
   private RecordConsumer recordConsumer;
-  
+
   private InternalFileEncryptor fileEncryptor;
   private int rowGroupOrdinal;
 
@@ -148,7 +148,8 @@ class InternalParquetRecordWriter<T> {
   }
 
   private void checkBlockSizeReached() throws IOException {
-    if (recordCount >= recordCountForNextMemCheck) { // checking the memory size is relatively expensive, so let's not do it for every record.
+    if (recordCount >= recordCountForNextMemCheck || writeSupport.needCheckRowSize) { // checking the memory size is relatively expensive, so let's not do it for every record.
+      writeSupport.needCheckRowSize = false;
       long memSize = columnStore.getBufferedSize();
       long recordSize = memSize / recordCount;
       // flush the row group if it is within ~2 records of the limit
