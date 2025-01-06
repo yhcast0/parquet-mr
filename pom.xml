@@ -213,6 +213,19 @@
     </dependencies>
   </dependencyManagement>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>user-snapshots</id>
+      <name>User Project SNAPSHOTS</name>
+      <url>https://repository.kyligence.io/repository/maven-snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>user-releases</id>
+      <name>User Project Release</name>
+      <url>https://repository.kyligence.io/repository/maven-releases/</url>
+    </repository>
+  </distributionManagement>
+
   <reporting>
     <plugins>
       <plugin>
